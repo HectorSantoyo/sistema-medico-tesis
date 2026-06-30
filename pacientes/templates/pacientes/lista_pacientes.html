@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}Mis Pacientes{% endblock %}
+{% block header %}Sistema médico{% endblock %}
+
+{% block content %}
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0">Mis pacientes</h2>
+        <a href="{% url 'crear_paciente' %}" class="btn btn-success">+ Nuevo paciente</a>
+    </div>
+
+    <div class="mb-4">
+        <input type="text" id="campo-busqueda" class="form-control" placeholder="Buscar paciente...">
+    </div>
+
+    {% if pacientes %}
+        <div class="row g-4">
+            {% for paciente in pacientes %}
+                <div class="col-md-4 tarjeta-paciente" data-nombre="{{ paciente.nombre|lower }} {{ paciente.apellido|lower }}">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ paciente.nombre }} {{ paciente.apellido }}</h5>
+                            <p class="card-text">
+                                <strong>Edad:</strong> {{ paciente.edad }}<br>
+                                <strong>Sexo:</strong> {{ paciente.sexo }}<br>
+                                <strong>Teléfono:</strong> {{ paciente.telefono|default:"No registrado" }}
+                            </p>
+                            <a href="{% url 'detalle_paciente' paciente.id %}" class="btn btn-primary">Ver expediente</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info mt-4">No tienes pacientes asignados por el momento.</div>
+    {% endif %}
+
+    <a href="/usuarios/dashboard/" class="btn btn-secondary mt-5">← Volver al Dashboard</a>
+
+    <script>
+        const campo = document.getElementById('campo-busqueda');
+        const tarjetas = document.querySelectorAll('.tarjeta-paciente');
+
+        campo.addEventListener('input', function () {
+            const texto = this.value.toLowerCase();
+
+            tarjetas.forEach(card => {
+                const nombre = card.getAttribute('data-nombre');
+                card.style.display = nombre.includes(texto) ? 'block' : 'none';
+            });
+        });
+    </script>
+
+{% endblock %}

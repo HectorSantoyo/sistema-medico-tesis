@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard Médico{% endblock %}
+{% block header %}Bienvenido, Dr. {{ medico.user.first_name }} {{ medico.user.last_name }}{% endblock %}
+
+{% block content %}
+<div class="row g-4 mb-5">
+    <div class="col-md-4">
+        <div class="card text-white bg-primary">
+            <div class="card-body">
+                <h5 class="card-title">Pacientes asignados</h5>
+                <p class="card-text display-5">{{ total_pacientes }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-success">
+            <div class="card-body">
+                <h5 class="card-title">Citas próximas</h5>
+                <p class="card-text display-5">{{ citas_proximas }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-danger">
+            <div class="card-body">
+                <h5 class="card-title">Alertas activas</h5>
+                <p class="card-text display-5">{{ alertas_activas }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="d-flex flex-wrap gap-2">
+    <a href="{% url 'lista_pacientes' %}" class="btn btn-outline-primary">Ver pacientes</a>
+    <a href="{% url 'citas_proximas' %}" class="btn btn-outline-success">Ver citas</a>
+    <a href="/alertas/activas/" class="btn btn-outline-danger">Ver alertas</a>
+</div>
+{% endblock %}

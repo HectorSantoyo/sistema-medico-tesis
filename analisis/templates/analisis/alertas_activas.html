@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Citas próximas{% endblock %}
+{% block header %}Sistema médico{% endblock %}
+
+{% block content %}
+        <h2 class="mb-4">Alertas clínicas activas</h2>
+
+        {% if alertas %}
+            <table class="table table-bordered table-hover bg-white">
+                <thead class="table-danger">
+                    <tr>
+                        <th>Paciente</th>
+                        <th>Descripción</th>
+                        <th>Nivel de riesgo</th>
+                        <th>Fecha</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for alerta in alertas %}
+                        <tr>
+                            <td>{{ alerta.paciente }}</td>
+                            <td>{{ alerta.descripcion }}</td>
+                            <td>
+                                {% if alerta.nivel_riesgo == 'Alto' %}
+                                    <span class="badge bg-danger">{{ alerta.nivel_riesgo }}</span>
+                                {% elif alerta.nivel_riesgo == 'Moderado' %}
+                                    <span class="badge bg-warning text-dark">{{ alerta.nivel_riesgo }}</span>
+                                {% else %}
+                                    <span class="badge bg-success">{{ alerta.nivel_riesgo }}</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ alerta.fecha_generada|date:"d/m/Y H:i" }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div class="alert alert-info">No hay alertas activas en este momento.</div>
+        {% endif %}
+
+        <a href="/usuarios/dashboard/" class="btn btn-secondary mt-4">← Volver al Dashboard</a>
+{% endblock %}

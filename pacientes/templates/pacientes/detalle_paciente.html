@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}Expediente de {{ paciente.nombre }}{% endblock %}
+{% block header %}Sistema médico{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0">Expediente de {{ paciente.nombre }} {{ paciente.apellido }}</h2>
+    <a href="{% url 'editar_paciente' paciente.id %}" class="btn btn-success">Editar paciente</a>
+</div>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <p><strong>Edad:</strong> {{ paciente.edad }}</p>
+        <p><strong>Sexo:</strong> {{ paciente.sexo }}</p>
+        <p><strong>Teléfono:</strong> {{ paciente.telefono }}</p>
+        <p><strong>Correo:</strong> {{ paciente.correo }}</p>
+        <p><strong>Dirección:</strong> {{ paciente.direccion }}</p>
+        <p><strong>Antecedentes médicos:</strong><br> {{ paciente.antecedentes_medicos }}</p>
+    </div>
+</div>
+
+<h4 class="mb-3">Historial clínico</h4>
+
+{% if registros %}
+    <ul class="list-group">
+        {% for registro in registros %}
+            <li class="list-group-item">
+                <strong>{{ registro.fecha|date:"d/m/Y H:i" }}:</strong><br>
+                <strong>Diagnóstico:</strong> {{ registro.diagnostico }}<br>
+                {% if registro.tratamiento %}
+                    <strong>Tratamiento:</strong> {{ registro.tratamiento }}<br>
+                {% endif %}
+                {% if registro.notas_adicionales %}
+                    <strong>Notas:</strong> {{ registro.notas_adicionales }}
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <div class="alert alert-info">Este paciente aún no tiene registros clínicos.</div>
+{% endif %}
+
+<a href="{% url 'lista_pacientes' %}" class="btn btn-secondary mt-4">← Volver a la lista</a>
+
+{% endblock %}
