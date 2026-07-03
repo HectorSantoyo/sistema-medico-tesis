@@ -21,7 +21,10 @@
     </div>
 </div>
 
-<h4 class="mb-3">Historial clínico</h4>
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h4 class="mb-0">Historial clínico</h4>
+    <a href="{% url 'crear_registro_clinico' paciente.id %}" class="btn btn-success">+ Nuevo registro clínico</a>
+</div>
 
 {% if registros %}
     <ul class="list-group">
@@ -33,7 +36,13 @@
                     <strong>Tratamiento:</strong> {{ registro.tratamiento }}<br>
                 {% endif %}
                 {% if registro.notas_adicionales %}
-                    <strong>Notas:</strong> {{ registro.notas_adicionales }}
+                    <strong>Notas:</strong> {{ registro.notas_adicionales }}<br>
+                {% endif %}
+                {% if registro.sintomas.all %}
+                    <strong>Síntomas:</strong>
+                    {% for sintoma in registro.sintomas.all %}
+                        <span class="badge bg-secondary">{{ sintoma.nombre }}</span>
+                    {% endfor %}
                 {% endif %}
             </li>
         {% endfor %}
