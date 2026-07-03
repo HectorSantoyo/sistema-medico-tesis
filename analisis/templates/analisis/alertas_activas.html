@@ -11,15 +11,18 @@
                 <thead class="table-danger">
                     <tr>
                         <th>Paciente</th>
+                        <th>Enfermedad</th>
                         <th>Descripción</th>
                         <th>Nivel de riesgo</th>
                         <th>Fecha</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for alerta in alertas %}
                         <tr>
                             <td>{{ alerta.paciente }}</td>
+                            <td>{{ alerta.enfermedad|default:"—" }}</td>
                             <td>{{ alerta.descripcion }}</td>
                             <td>
                                 {% if alerta.nivel_riesgo == 'Alto' %}
@@ -31,6 +34,12 @@
                                 {% endif %}
                             </td>
                             <td>{{ alerta.fecha_generada|date:"d/m/Y H:i" }}</td>
+                            <td>
+                                <form method="post" action="{% url 'resolver_alerta' alerta.id %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-secondary btn-sm">Marcar como resuelta</button>
+                                </form>
+                            </td>
                         </tr>
                     {% endfor %}
                 </tbody>

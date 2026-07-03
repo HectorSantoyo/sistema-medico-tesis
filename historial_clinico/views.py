@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from pacientes.models import Paciente
 from usuarios.models import Medico
+from analisis.services import analizar_paciente_y_generar_alertas
 from .forms import RegistroClinicoForm
 
 
@@ -19,6 +20,7 @@ def crear_registro_clinico(request, paciente_id):
             registro.medico = medico
             registro.save()
             form.save_m2m()
+            analizar_paciente_y_generar_alertas(paciente, medico)
             messages.success(request, 'Registro clínico creado con éxito.')
             return redirect('detalle_paciente', paciente_id=paciente.id)
     else:
