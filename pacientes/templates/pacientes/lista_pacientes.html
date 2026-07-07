@@ -1,14 +1,12 @@
 {% extends "base.html" %}
 
 {% block title %}Mis Pacientes{% endblock %}
-{% block header %}Sistema médico{% endblock %}
+{% block header %}Mis pacientes{% endblock %}
+{% block header_actions %}
+    <a href="{% url 'crear_paciente' %}" class="btn btn-success">+ Nuevo paciente</a>
+{% endblock %}
 
 {% block content %}
-
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="mb-0">Mis pacientes</h2>
-        <a href="{% url 'crear_paciente' %}" class="btn btn-success">+ Nuevo paciente</a>
-    </div>
 
     <div class="mb-4">
         <input type="text" id="campo-busqueda" class="form-control" placeholder="Buscar paciente...">
@@ -18,7 +16,7 @@
         <div class="row g-4">
             {% for paciente in pacientes %}
                 <div class="col-md-4 tarjeta-paciente" data-nombre="{{ paciente.nombre|lower }} {{ paciente.apellido|lower }}">
-                    <div class="card h-100 shadow-sm">
+                    <div class="card app-card h-100">
                         <div class="card-body">
                             <h5 class="card-title">{{ paciente.nombre }} {{ paciente.apellido }}</h5>
                             <p class="card-text">
@@ -36,7 +34,9 @@
         <div class="alert alert-info mt-4">No tienes pacientes asignados por el momento.</div>
     {% endif %}
 
-    <a href="/usuarios/dashboard/" class="btn btn-secondary mt-5">← Volver al Dashboard</a>
+    <div class="app-actions-row">
+        <a href="{% url 'dashboard' %}" class="btn btn-volver">← Volver al Dashboard</a>
+    </div>
 
     <script>
         const campo = document.getElementById('campo-busqueda');

@@ -1,115 +1,125 @@
 {% extends "base.html" %}
 
 {% block title %}Dashboard de análisis clínico{% endblock %}
-{% block header %}Sistema médico{% endblock %}
+{% block header %}Dashboard de análisis clínico{% endblock %}
 
 {% block content %}
-<h2 class="mb-4">Dashboard de análisis clínico</h2>
 
 <div class="row g-4 mb-5">
     <div class="col-md-3">
-        <div class="card text-white bg-primary">
+        <div class="card stat-card stat-card--primary">
             <div class="card-body">
-                <h5 class="card-title">Pacientes</h5>
-                <p class="card-text display-6">{{ total_pacientes }}</p>
+                <div class="stat-card-label">Pacientes</div>
+                <div class="stat-card-value">{{ total_pacientes }}</div>
             </div>
         </div>
     </div>
     <div class="col-md-3">
-        <div class="card text-white bg-info">
+        <div class="card stat-card stat-card--secondary">
             <div class="card-body">
-                <h5 class="card-title">Registros clínicos</h5>
-                <p class="card-text display-6">{{ total_registros_clinicos }}</p>
+                <div class="stat-card-label">Registros clínicos</div>
+                <div class="stat-card-value">{{ total_registros_clinicos }}</div>
             </div>
         </div>
     </div>
     <div class="col-md-3">
-        <div class="card text-white bg-danger">
+        <div class="card stat-card stat-card--danger">
             <div class="card-body">
-                <h5 class="card-title">Alertas activas</h5>
-                <p class="card-text display-6">{{ alertas_activas }}</p>
+                <div class="stat-card-label">Alertas activas</div>
+                <div class="stat-card-value">{{ alertas_activas }}</div>
             </div>
         </div>
     </div>
     <div class="col-md-3">
-        <div class="card text-white bg-secondary">
+        <div class="card stat-card stat-card--muted">
             <div class="card-body">
-                <h5 class="card-title">Alertas resueltas</h5>
-                <p class="card-text display-6">{{ alertas_resueltas }}</p>
+                <div class="stat-card-label">Alertas resueltas</div>
+                <div class="stat-card-value">{{ alertas_resueltas }}</div>
             </div>
         </div>
     </div>
 </div>
 
-<h4 class="mb-3">Alertas por nivel de riesgo</h4>
-{% if total_alertas %}
-    <table class="table table-bordered bg-white align-middle">
-        <thead>
-            <tr>
-                <th>Nivel</th>
-                <th>Total</th>
-                <th style="width: 50%;">Distribución</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for item in distribucion_por_nivel %}
-                <tr>
-                    <td>
-                        {% if item.nivel == 'Alto' %}
-                            <span class="badge bg-danger">{{ item.nivel }}</span>
-                        {% elif item.nivel == 'Moderado' %}
-                            <span class="badge bg-warning text-dark">{{ item.nivel }}</span>
-                        {% else %}
-                            <span class="badge bg-success">{{ item.nivel }}</span>
-                        {% endif %}
-                    </td>
-                    <td>{{ item.total }}</td>
-                    <td>
-                        <div class="progress" role="progressbar" style="height: 20px;">
-                            {% if item.nivel == 'Alto' %}
-                                <div class="progress-bar bg-danger" style="width: {{ item.porcentaje }}%;">{{ item.porcentaje|floatformat:0 }}%</div>
-                            {% elif item.nivel == 'Moderado' %}
-                                <div class="progress-bar bg-warning text-dark" style="width: {{ item.porcentaje }}%;">{{ item.porcentaje|floatformat:0 }}%</div>
-                            {% else %}
-                                <div class="progress-bar bg-success" style="width: {{ item.porcentaje }}%;">{{ item.porcentaje|floatformat:0 }}%</div>
-                            {% endif %}
-                        </div>
-                    </td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-{% else %}
-    <div class="alert alert-info">Todavía no hay alertas generadas para mostrar la distribución por nivel de riesgo.</div>
-{% endif %}
+<div class="card app-card mb-4">
+    <div class="card-body">
+        <h2 class="app-section-title">Alertas por nivel de riesgo</h2>
+        {% if total_alertas %}
+            <table class="table align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th>Nivel</th>
+                        <th>Total</th>
+                        <th style="width: 50%;">Distribución</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in distribucion_por_nivel %}
+                        <tr>
+                            <td>
+                                {% if item.nivel == 'Alto' %}
+                                    <span class="badge badge-risk-alto">{{ item.nivel }}</span>
+                                {% elif item.nivel == 'Moderado' %}
+                                    <span class="badge badge-risk-moderado">{{ item.nivel }}</span>
+                                {% else %}
+                                    <span class="badge badge-risk-bajo">{{ item.nivel }}</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ item.total }}</td>
+                            <td>
+                                <div class="progress" role="progressbar" style="height: 18px;">
+                                    {% if item.nivel == 'Alto' %}
+                                        <div class="progress-bar progress-bar-risk-alto" style="width: {{ item.porcentaje }}%;">{{ item.porcentaje|floatformat:0 }}%</div>
+                                    {% elif item.nivel == 'Moderado' %}
+                                        <div class="progress-bar progress-bar-risk-moderado" style="width: {{ item.porcentaje }}%;">{{ item.porcentaje|floatformat:0 }}%</div>
+                                    {% else %}
+                                        <div class="progress-bar progress-bar-risk-bajo" style="width: {{ item.porcentaje }}%;">{{ item.porcentaje|floatformat:0 }}%</div>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div class="alert alert-info mb-0">Todavía no hay alertas generadas para mostrar la distribución por nivel de riesgo.</div>
+        {% endif %}
+    </div>
+</div>
 
-<h4 class="mb-3 mt-4">Alertas por enfermedad</h4>
-{% if distribucion_por_enfermedad %}
-    <table class="table table-bordered bg-white align-middle">
-        <thead>
-            <tr>
-                <th>Enfermedad</th>
-                <th>Total</th>
-                <th style="width: 50%;">Distribución</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for item in distribucion_por_enfermedad %}
-                <tr>
-                    <td>{{ item.enfermedad }}</td>
-                    <td>{{ item.total }}</td>
-                    <td>
-                        <div class="progress" role="progressbar" style="height: 20px;">
-                            <div class="progress-bar bg-info" style="width: {{ item.porcentaje }}%;">{{ item.porcentaje|floatformat:0 }}%</div>
-                        </div>
-                    </td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-{% else %}
-    <div class="alert alert-info">Todavía no hay alertas generadas para mostrar la distribución por enfermedad.</div>
-{% endif %}
+<div class="card app-card">
+    <div class="card-body">
+        <h2 class="app-section-title">Alertas por enfermedad</h2>
+        {% if distribucion_por_enfermedad %}
+            <table class="table align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th>Enfermedad</th>
+                        <th>Total</th>
+                        <th style="width: 50%;">Distribución</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in distribucion_por_enfermedad %}
+                        <tr>
+                            <td>{{ item.enfermedad }}</td>
+                            <td>{{ item.total }}</td>
+                            <td>
+                                <div class="progress" role="progressbar" style="height: 18px;">
+                                    <div class="progress-bar" style="width: {{ item.porcentaje }}%; background-color: var(--color-secondary);">{{ item.porcentaje|floatformat:0 }}%</div>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div class="alert alert-info mb-0">Todavía no hay alertas generadas para mostrar la distribución por enfermedad.</div>
+        {% endif %}
+    </div>
+</div>
 
-<a href="{% url 'dashboard' %}" class="btn btn-secondary mt-4">← Volver al Dashboard</a>
+<div class="app-actions-row">
+    <a href="{% url 'dashboard' %}" class="btn btn-volver">← Volver al Dashboard</a>
+    <a href="{% url 'alertas_activas' %}" class="btn btn-volver">Ver alertas</a>
+</div>
 {% endblock %}

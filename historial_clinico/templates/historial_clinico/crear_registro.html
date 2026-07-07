@@ -1,33 +1,53 @@
 {% extends "base.html" %}
 
 {% block title %}Nuevo registro clínico{% endblock %}
-{% block header %}Sistema médico{% endblock %}
+{% block header %}Nuevo registro clínico{% endblock %}
 
 {% block content %}
-<h2 class="mb-4 text-center">Nuevo registro clínico</h2>
-<p class="text-center mb-4">Paciente: <strong>{{ paciente.nombre }} {{ paciente.apellido }}</strong></p>
 <div class="row justify-content-center">
-    <div class="col-md-6">
-        <div class="card shadow-sm">
+    <div class="col-lg-9">
+        <p class="app-page-subtitle mb-4">Paciente: <strong class="text-body">{{ paciente.nombre }} {{ paciente.apellido }}</strong></p>
+
+        <div class="card app-card">
             <div class="card-body">
-                <form method="post">
+                {% if form.errors %}
+                    <div class="alert alert-danger">Por favor corrige los errores marcados en el formulario.</div>
+                {% endif %}
+
+                <form method="post" novalidate>
                     {% csrf_token %}
 
-                    {% if form.errors %}
-                        <div class="alert alert-danger">
-                            <strong>Por favor corrige los errores en el formulario:</strong>
-                        </div>
-                    {% endif %}
+                    {% include "includes/form_field.html" with field=form.diagnostico %}
 
-                    {{ form.as_p }}
-                    <div class="text-center mt-4">
+                    <div class="row g-3">
+                        <div class="col-md-6">{% include "includes/form_field.html" with field=form.tratamiento %}</div>
+                        <div class="col-md-6">{% include "includes/form_field.html" with field=form.notas_adicionales %}</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Síntomas</label>
+                        <div class="sintomas-grid">
+                            {% for checkbox in form.sintomas %}
+                                <label class="sintoma-item" for="{{ checkbox.id_for_label }}">
+                                    {{ checkbox.tag }}
+                                    <span>{{ checkbox.choice_label }}</span>
+                                </label>
+                            {% endfor %}
+                        </div>
+                        {% for error in form.sintomas.errors %}
+                            <div class="invalid-feedback d-block">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="app-form-actions">
+                        <div class="d-flex gap-2 flex-wrap">
+                            <a href="{% url 'detalle_paciente' paciente.id %}" class="btn btn-volver">← Volver al expediente</a>
+                            <a href="{% url 'dashboard' %}" class="btn btn-volver">Ir al Dashboard</a>
+                        </div>
                         <button type="submit" class="btn btn-success">Guardar registro clínico</button>
                     </div>
                 </form>
             </div>
-        </div>
-        <div class="text-center mt-3">
-            <a href="{% url 'detalle_paciente' paciente.id %}" class="btn btn-link">← Volver al expediente</a>
         </div>
     </div>
 </div>

@@ -8,6 +8,9 @@ class RegistroClinicoForm(forms.ModelForm):
         fields = ['diagnostico', 'tratamiento', 'notas_adicionales', 'sintomas']
         widgets = {
             'sintomas': forms.CheckboxSelectMultiple(),
+            'diagnostico': forms.Textarea(attrs={'rows': 3}),
+            'tratamiento': forms.Textarea(attrs={'rows': 2}),
+            'notas_adicionales': forms.Textarea(attrs={'rows': 2}),
         }
         labels = {
             'diagnostico': 'Diagnóstico',

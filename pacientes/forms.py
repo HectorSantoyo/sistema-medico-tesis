@@ -5,6 +5,18 @@ class PacienteForm(forms.ModelForm):
     class Meta:
         model = Paciente
         exclude = ['medico_asignado']
+        widgets = {
+            'direccion': forms.Textarea(attrs={'rows': 2}),
+            'antecedentes_medicos': forms.Textarea(attrs={'rows': 3}),
+            'telefono': forms.TextInput(attrs={'placeholder': '10 dígitos'}),
+            'correo': forms.EmailInput(attrs={'placeholder': 'correo@ejemplo.com'}),
+        }
+        labels = {
+            'telefono': 'Teléfono',
+            'correo': 'Correo electrónico',
+            'direccion': 'Dirección',
+            'antecedentes_medicos': 'Antecedentes médicos',
+        }
 
     def clean_telefono(self):
         telefono = self.cleaned_data.get('telefono')

@@ -9,6 +9,13 @@ class CitaForm(forms.ModelForm):
         widgets = {
             'fecha': forms.DateInput(attrs={'type': 'date'}),
             'hora': forms.TimeInput(attrs={'type': 'time'}),
+            'motivo': forms.TextInput(attrs={'placeholder': 'Motivo de la consulta'}),
+        }
+        labels = {
+            'paciente': 'Paciente',
+            'fecha': 'Fecha',
+            'hora': 'Hora',
+            'motivo': 'Motivo',
         }
 
     def __init__(self, *args, **kwargs):

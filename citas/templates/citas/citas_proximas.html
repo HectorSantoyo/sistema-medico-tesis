@@ -1,47 +1,59 @@
 {% extends "base.html" %}
 
 {% block title %}Citas próximas{% endblock %}
-{% block header %}Sistema médico{% endblock %}
+{% block header %}Citas próximas{% endblock %}
+{% block header_actions %}
+    <a href="{% url 'crear_cita' %}" class="btn btn-success">+ Nueva cita</a>
+{% endblock %}
 
 {% block content %}
 
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h2 class="mb-0">Citas próximas</h2>
-    <a href="{% url 'crear_cita' %}" class="btn btn-success">+ Nueva cita</a>
-</div>
-
 {% if citas %}
-    <table class="table table-bordered table-hover bg-white">
-        <thead>
-            <tr>
-                <th>Paciente</th>
-                <th>Fecha</th>
-                <th>Hora</th>
-                <th>Motivo</th>
-                <th>Estado</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for cita in citas %}
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead>
                 <tr>
-                    <td>{{ cita.paciente }}</td>
-                    <td>{{ cita.fecha }}</td>
-                    <td>{{ cita.hora }}</td>
-                    <td>{{ cita.motivo }}</td>
-                    <td>{{ cita.estado }}</td>
-                    <td>
-                        <a href="{% url 'editar_cita' cita.id %}" class="btn btn-sm btn-outline-primary">Editar</a>
-                        <a href="{% url 'eliminar_cita' cita.id %}" class="btn btn-sm btn-outline-danger">Eliminar</a>
-                    </td>
+                    <th>Paciente</th>
+                    <th>Fecha</th>
+                    <th>Hora</th>
+                    <th>Motivo</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                {% for cita in citas %}
+                    <tr>
+                        <td>{{ cita.paciente }}</td>
+                        <td>{{ cita.fecha }}</td>
+                        <td>{{ cita.hora }}</td>
+                        <td>{{ cita.motivo|default:"—" }}</td>
+                        <td>
+                            {% if cita.estado == 'Agendada' %}
+                                <span class="badge badge-neutral">Agendada</span>
+                            {% elif cita.estado == 'Cancelada' %}
+                                <span class="badge badge-risk-alto">Cancelada</span>
+                            {% elif cita.estado == 'Reprogramada' %}
+                                <span class="badge badge-risk-moderado">Reprogramada</span>
+                            {% else %}
+                                <span class="badge badge-risk-bajo">Finalizada</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="{% url 'editar_cita' cita.id %}" class="btn btn-sm btn-outline-primary">Editar</a>
+                            <a href="{% url 'eliminar_cita' cita.id %}" class="btn btn-sm btn-outline-danger">Eliminar</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 {% else %}
     <div class="alert alert-info">No hay citas programadas.</div>
 {% endif %}
 
-<a href="/usuarios/dashboard/" class="btn btn-secondary mt-4">← Volver al Dashboard</a>
+<div class="app-actions-row">
+    <a href="{% url 'dashboard' %}" class="btn btn-volver">← Volver al Dashboard</a>
+</div>
 
 {% endblock %}

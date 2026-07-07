@@ -1,31 +1,31 @@
 {% extends "base.html" %}
 
 {% block title %}Dashboard Médico{% endblock %}
-{% block header %}Bienvenido, Dr. {{ medico.user.first_name }} {{ medico.user.last_name }}{% endblock %}
+{% block header %}Bienvenido, Dr(a). {{ medico.user.first_name }} {{ medico.user.last_name }}{% endblock %}
 
 {% block content %}
 <div class="row g-4 mb-5">
     <div class="col-md-4">
-        <div class="card text-white bg-primary">
+        <div class="card stat-card stat-card--primary">
             <div class="card-body">
-                <h5 class="card-title">Pacientes asignados</h5>
-                <p class="card-text display-5">{{ total_pacientes }}</p>
+                <div class="stat-card-label">Pacientes asignados</div>
+                <div class="stat-card-value">{{ total_pacientes }}</div>
             </div>
         </div>
     </div>
     <div class="col-md-4">
-        <div class="card text-white bg-success">
+        <div class="card stat-card stat-card--success">
             <div class="card-body">
-                <h5 class="card-title">Citas próximas</h5>
-                <p class="card-text display-5">{{ citas_proximas }}</p>
+                <div class="stat-card-label">Citas próximas</div>
+                <div class="stat-card-value">{{ citas_proximas }}</div>
             </div>
         </div>
     </div>
     <div class="col-md-4">
-        <div class="card text-white bg-danger">
+        <div class="card stat-card stat-card--danger">
             <div class="card-body">
-                <h5 class="card-title">Alertas activas</h5>
-                <p class="card-text display-5">{{ alertas_activas }}</p>
+                <div class="stat-card-label">Alertas activas</div>
+                <div class="stat-card-value">{{ alertas_activas }}</div>
             </div>
         </div>
     </div>
@@ -34,7 +34,7 @@
 <div class="d-flex flex-wrap gap-2">
     <a href="{% url 'lista_pacientes' %}" class="btn btn-outline-primary">Ver pacientes</a>
     <a href="{% url 'citas_proximas' %}" class="btn btn-outline-success">Ver citas</a>
-    <a href="/alertas/activas/" class="btn btn-outline-danger">Ver alertas</a>
+    <a href="{% url 'alertas_activas' %}" class="btn btn-outline-danger">Ver alertas</a>
     <a href="{% url 'dashboard_analisis' %}" class="btn btn-outline-secondary">Ver análisis</a>
 </div>
 {% endblock %}
